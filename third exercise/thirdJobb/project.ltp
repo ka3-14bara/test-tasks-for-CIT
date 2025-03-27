@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-16"?>
+<LTProjectRoot xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <Project>
+        <Name>thirdJobb</Name>
+        <TypeSort>1</TypeSort>
+        <OrchId>0</OrchId>
+    </Project>
+    <RunConfig>None</RunConfig>
+    <RobotEdition>Enterprise</RobotEdition>
+</LTProjectRoot>

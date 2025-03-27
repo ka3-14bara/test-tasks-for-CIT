@@ -1,2 +1,0 @@
-.gitignore
-num2.py

@@ -28,10 +28,52 @@
 * Все нечетные числа записать в файл odd.txt через пользовательский интерфейс с переносом строки
 * Все четные числа записать в файл even.txt через пользовательский интерфейс с разделителем «,»
 * После записи всех чисел в оба файла, их нужно сохранить через пользовательский интерфейс «Файл» -> «Cохранить»
-
-## Решение
+__________________________________________
+## Решения
 
 ### Решение задания №1:
+
+Кнопка скачивания excel файла ищется при помощи XPATH и затем скачивается при помощи библиотеки requests:
+```py
+ driver = webdriver.Chrome()
+    driver.get("https://www.rpachallenge.com/")
+
+    downloadElement = driver.find_element(By.XPATH, '//*[text()=" Download Excel "]')
+
+    url = downloadElement.get_attribute("href")
+  
+    response = requests.get(url)
+    response.raise_for_status()
+```
+
+После получения файла он записывается в файл с расширением xlsx. После чего при помощи pandas считывается содержимое файла. Далее вызывается метод(функция) CreatePersons, которая возвращает словарь словаря, в котором содержатся все данные людей - ключами являются person_(порядковый номер), а их значениями словарь, в котором ключи соответствуют названиям ng-reflect-name полей формы на сайте, значениями являются соответственно искомые данные.  
+```py
+def CreatePersons(contacts, fields) -> dict:
+    rows = contacts.shape[0]
+    columns = contacts.shape[1]
+    people = dict()
+    
+    for i in range (rows):
+        name = ('person_%s' % i)
+        people[name] = { "FirstName" : '', "LastName" : '', "Company" : '', "Role" : '', "Address" : '', "Email" : '',"Phone" : ''}
+        for j in range (columns):
+            people[name][fields[j]] = str(contacts.iloc[i,j])
+    return people
+```
+
+Далее вызывается метод FillForm, который уже заполняет поля формы. Искомое поле формы ищется и заполняется во вложенном (внутреннем цикле). Внешний цикл перебирает persons словаря.
+```py
+def FillForm(persons, fields) -> None:
+    for person in persons:
+        for i in range(len(fields)):
+            element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, "[ng-reflect-name='label%s']" % fields[i])))
+            element.send_keys(persons[person][fields[i]])
+        submit_button = driver.find_element(By.XPATH, "//input[@type='submit' and @value='Submit']")
+        submit_button.click()
+```
+
+Результат работы:
+<img src = "./second exercise/works-result-firstJob.png" width = 100%>
 
 ### Решение задания №2:
 
@@ -84,6 +126,10 @@ if n1 == 0:
 else:
     area[colors[3]].click()
 ```
+
+Результат работы:
+<img src = "./first-exercise/Снимок экрана 2025-03-27 191320.png" width = 100%>
+
 
 ### Решение задания №3:
 
